@@ -2,8 +2,13 @@ import java.util.*;
 
 public class TrainConsistManagementApp {
 
-    // Binary Search Method
+    // Binary Search with validation (UC20)
     public static boolean binarySearchBogie(String[] bogieIds, String key) {
+
+        // 🔥 UC20: Fail-Fast Validation
+        if (bogieIds == null || bogieIds.length == 0) {
+            throw new IllegalStateException("No bogies available in the train. Cannot perform search.");
+        }
 
         int low = 0;
         int high = bogieIds.length - 1;
@@ -14,47 +19,55 @@ public class TrainConsistManagementApp {
             int result = bogieIds[mid].compareTo(key);
 
             if (result == 0) {
-                return true; // Found
+                return true;
             } else if (result < 0) {
-                low = mid + 1; // Search right half
+                low = mid + 1;
             } else {
-                high = mid - 1; // Search left half
+                high = mid - 1;
             }
         }
 
-        return false; // Not found
+        return false;
     }
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        // Input size
-        System.out.print("Enter number of bogies: ");
-        int n = Integer.parseInt(sc.nextLine());
+        try {
+            // Input size
+            System.out.print("Enter number of bogies: ");
+            int n = Integer.parseInt(sc.nextLine());
 
-        String[] bogieIds = new String[n];
+            String[] bogieIds = new String[n];
 
-        // Input bogie IDs
-        System.out.println("Enter bogie IDs:");
-        for (int i = 0; i < n; i++) {
-            bogieIds[i] = sc.nextLine();
-        }
+            // Input bogie IDs
+            if (n > 0) {
+                System.out.println("Enter bogie IDs:");
+                for (int i = 0; i < n; i++) {
+                    bogieIds[i] = sc.nextLine();
+                }
+            }
 
-        // 🔥 IMPORTANT: Sort before binary search
-        Arrays.sort(bogieIds);
+            // 🔥 Sort before binary search
+            Arrays.sort(bogieIds);
 
-        // Input search key
-        System.out.print("Enter bogie ID to search: ");
-        String key = sc.nextLine();
+            // Input search key
+            System.out.print("Enter bogie ID to search: ");
+            String key = sc.nextLine();
 
-        // Perform search
-        boolean found = binarySearchBogie(bogieIds, key);
+            // Perform search
+            boolean found = binarySearchBogie(bogieIds, key);
 
-        // Output
-        if (found) {
-            System.out.println("Bogie ID " + key + " found in the consist.");
-        } else {
-            System.out.println("Bogie ID " + key + " NOT found.");
+            // Output
+            if (found) {
+                System.out.println("Bogie ID " + key + " found in the consist.");
+            } else {
+                System.out.println("Bogie ID " + key + " NOT found.");
+            }
+
+        } catch (IllegalStateException e) {
+            // 🔥 Handle UC20 exception
+            System.out.println("Error: " + e.getMessage());
         }
 
         sc.close();
