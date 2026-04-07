@@ -1,39 +1,45 @@
 import java.util.*;
-import java.util.regex.*;
 
 public class TrainConsistManagementApp {
 
-    public static void main(String[] args) {
+    static class GoodsBogie {
+        private String type;
+        private String cargo;
 
-        Scanner sc = new Scanner(System.in);
-
-        System.out.print("Enter Train ID: ");
-        String trainId = sc.nextLine();
-
-        System.out.print("Enter Cargo Code: ");
-        String cargoCode = sc.nextLine();
-
-        Pattern trainPattern = Pattern.compile("TRN-\\d{4}");
-        Pattern cargoPattern = Pattern.compile("PET-[A-Z]{2}");
-
-        Matcher trainMatcher = trainPattern.matcher(trainId);
-        Matcher cargoMatcher = cargoPattern.matcher(cargoCode);
-
-        boolean isTrainValid = trainMatcher.matches();
-        boolean isCargoValid = cargoMatcher.matches();
-
-        System.out.println("\n=== Validation Result ===\n");
-
-        if (isTrainValid) {
-            System.out.println("Train ID is valid");
-        } else {
-            System.out.println("Train ID is invalid");
+        public GoodsBogie(String type, String cargo) {
+            this.type = type;
+            this.cargo = cargo;
         }
 
-        if (isCargoValid) {
-            System.out.println("Cargo Code is valid");
+        public String getType() {
+            return type;
+        }
+
+        public String getCargo() {
+            return cargo;
+        }
+    }
+
+    public static void main(String[] args) {
+
+        List<GoodsBogie> bogieList = new ArrayList<>();
+
+        bogieList.add(new GoodsBogie("Cylindrical", "Petroleum"));
+        bogieList.add(new GoodsBogie("Rectangular", "Coal"));
+        bogieList.add(new GoodsBogie("Rectangular", "Grain"));
+
+        boolean isSafe = bogieList.stream()
+                .allMatch(b ->
+                        !b.getType().equalsIgnoreCase("Cylindrical") ||
+                                b.getCargo().equalsIgnoreCase("Petroleum")
+                );
+
+        System.out.println("=== Safety Compliance Check ===\n");
+
+        if (isSafe) {
+            System.out.println("Train is SAFE for operation");
         } else {
-            System.out.println("Cargo Code is invalid");
+            System.out.println("Train is NOT SAFE for operation");
         }
 
         System.out.println("\nProgram Continues...");
