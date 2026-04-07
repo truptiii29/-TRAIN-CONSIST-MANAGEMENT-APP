@@ -1,53 +1,43 @@
-import java.util.*;
-
 public class TrainConsistManagementApp {
 
-    static class CargoSafetyException extends RuntimeException {
-        public CargoSafetyException(String message) {
-            super(message);
-        }
-    }
-
-    static class GoodsBogie {
-        private String shape;
-        private String cargo;
-
-        public GoodsBogie(String shape) {
-            this.shape = shape;
-        }
-
-        public void assignCargo(String cargo) {
-            try {
-                if ("Rectangular".equalsIgnoreCase(shape) && "Petroleum".equalsIgnoreCase(cargo)) {
-                    throw new CargoSafetyException("Unsafe cargo assignment: Petroleum cannot go in Rectangular bogie");
+    public static void bubbleSort(int[] capacities) {
+        int n = capacities.length;
+        boolean swapped;
+        // Outer loop for passes
+        for (int i = 0; i < n - 1; i++) {
+            swapped = false;
+            // Inner loop for comparing adjacent elements
+            for (int j = 0; j < n - i - 1; j++) {
+                if (capacities[j] > capacities[j + 1]) {
+                    // Swap elements
+                    int temp = capacities[j];
+                    capacities[j] = capacities[j + 1];
+                    capacities[j + 1] = temp;
+                    swapped = true;
                 }
-                this.cargo = cargo;
-                System.out.println("Cargo '" + cargo + "' assigned to " + shape + " bogie successfully.");
-            } catch (CargoSafetyException e) {
-                System.out.println("Error: " + e.getMessage());
-            } finally {
-                System.out.println("Cargo assignment attempt completed for " + shape + " bogie.\n");
             }
-        }
-
-        public String getShape() {
-            return shape;
-        }
-
-        public String getCargo() {
-            return cargo;
+            // If no elements were swapped in inner loop, array is sorted
+            if (!swapped) {
+                break;
+            }
         }
     }
 
     public static void main(String[] args) {
-        List<GoodsBogie> goodsBogieList = new ArrayList<>();
-        goodsBogieList.add(new GoodsBogie("Rectangular"));
-        goodsBogieList.add(new GoodsBogie("Cylindrical"));
-        goodsBogieList.add(new GoodsBogie("Rectangular"));
+        int[] passengerCapacities = {72, 56, 24, 70, 60};
 
-        goodsBogieList.get(0).assignCargo("Coal");         // safe
-        goodsBogieList.get(1).assignCargo("Petroleum");    // safe
-        goodsBogieList.get(2).assignCargo("Petroleum");    // unsafe
-        System.out.println("Program continues safely after cargo assignments.");
+        System.out.println("Original capacities:");
+        for (int cap : passengerCapacities) {
+            System.out.print(cap + " ");
+        }
+        System.out.println();
+
+        bubbleSort(passengerCapacities);
+
+        System.out.println("Sorted capacities (ascending order):");
+        for (int cap : passengerCapacities) {
+            System.out.print(cap + " ");
+        }
+        System.out.println();
     }
 }
