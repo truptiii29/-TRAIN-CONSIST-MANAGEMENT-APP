@@ -5,7 +5,6 @@ public class TrainConsistManagementApp {
     // Binary Search with validation (UC20)
     public static boolean binarySearchBogie(String[] bogieIds, String key) {
 
-        // 🔥 UC20: Fail-Fast Validation
         if (bogieIds == null || bogieIds.length == 0) {
             throw new IllegalStateException("No bogies available in the train. Cannot perform search.");
         }
@@ -48,7 +47,6 @@ public class TrainConsistManagementApp {
                 }
             }
 
-            // 🔥 Sort before binary search
             Arrays.sort(bogieIds);
 
             // Input search key
@@ -66,7 +64,6 @@ public class TrainConsistManagementApp {
             }
 
         } catch (IllegalStateException e) {
-            // 🔥 Handle UC20 exception
             System.out.println("Error: " + e.getMessage());
         }
 
