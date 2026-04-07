@@ -19,10 +19,6 @@ public class TrainConsistManagementApp {
         public int getCapacity() {
             return capacity;
         }
-
-        public void display() {
-            System.out.println(name + " - Capacity: " + capacity);
-        }
     }
 
     public static void main(String[] args) {
@@ -34,18 +30,13 @@ public class TrainConsistManagementApp {
         bogieList.add(new Bogie("First Class", 24));
         bogieList.add(new Bogie("Sleeper", 72));
 
-        Map<String, List<Bogie>> groupedBogies =
-                bogieList.stream()
-                        .collect(Collectors.groupingBy(Bogie::getName));
+        int totalSeats = bogieList.stream()
+                .map(b -> b.getCapacity())
+                .reduce(0, Integer::sum);
 
-        System.out.println("=== Grouped Bogies by Type ===\n");
+        System.out.println("=== Total Seating Capacity ===\n");
+        System.out.println("Total Seats: " + totalSeats);
 
-        groupedBogies.forEach((type, list) -> {
-            System.out.println(type + ":");
-            list.forEach(b -> b.display());
-            System.out.println();
-        });
-
-        System.out.println("Program Continues...");
+        System.out.println("\nProgram Continues...");
     }
 }
