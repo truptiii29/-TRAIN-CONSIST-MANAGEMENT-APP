@@ -2,51 +2,52 @@ import java.util.*;
 
 public class TrainConsistManagementApp {
 
-    static class InvalidCapacityException extends Exception {
-        public InvalidCapacityException(String message) {
+    static class CargoSafetyException extends RuntimeException {
+        public CargoSafetyException(String message) {
             super(message);
         }
     }
 
-    static class PassengerBogie {
-        private String type;
-        private int capacity;
+    static class GoodsBogie {
+        private String shape;
+        private String cargo;
 
-        public PassengerBogie(String type, int capacity) throws InvalidCapacityException {
-            if (capacity <= 0) {
-                throw new InvalidCapacityException("Capacity must be greater than zero");
+        public GoodsBogie(String shape) {
+            this.shape = shape;
+        }
+
+        public void assignCargo(String cargo) {
+            try {
+                if ("Rectangular".equalsIgnoreCase(shape) && "Petroleum".equalsIgnoreCase(cargo)) {
+                    throw new CargoSafetyException("Unsafe cargo assignment: Petroleum cannot go in Rectangular bogie");
+                }
+                this.cargo = cargo;
+                System.out.println("Cargo '" + cargo + "' assigned to " + shape + " bogie successfully.");
+            } catch (CargoSafetyException e) {
+                System.out.println("Error: " + e.getMessage());
+            } finally {
+                System.out.println("Cargo assignment attempt completed for " + shape + " bogie.\n");
             }
-            this.type = type;
-            this.capacity = capacity;
         }
 
-        public String getType() {
-            return type;
+        public String getShape() {
+            return shape;
         }
 
-        public int getCapacity() {
-            return capacity;
+        public String getCargo() {
+            return cargo;
         }
     }
 
     public static void main(String[] args) {
+        List<GoodsBogie> goodsBogieList = new ArrayList<>();
+        goodsBogieList.add(new GoodsBogie("Rectangular"));
+        goodsBogieList.add(new GoodsBogie("Cylindrical"));
+        goodsBogieList.add(new GoodsBogie("Rectangular"));
 
-        List<PassengerBogie> bogieList = new ArrayList<>();
-
-        try {
-            bogieList.add(new PassengerBogie("Sleeper", 72));
-            bogieList.add(new PassengerBogie("AC Chair", 56));
-            bogieList.add(new PassengerBogie("First Class", 24));
-            bogieList.add(new PassengerBogie("Invalid Bogie", -5));
-        } catch (InvalidCapacityException e) {
-            System.out.println("Error creating bogie: " + e.getMessage());
-        }
-
-        System.out.println("\nValid Passenger Bogies:");
-        for (PassengerBogie b : bogieList) {
-            System.out.println(b.getType() + " - Capacity: " + b.getCapacity());
-        }
-
-        System.out.println("\nProgram Continues Safely...");
+        goodsBogieList.get(0).assignCargo("Coal");         // safe
+        goodsBogieList.get(1).assignCargo("Petroleum");    // safe
+        goodsBogieList.get(2).assignCargo("Petroleum");    // unsafe
+        System.out.println("Program continues safely after cargo assignments.");
     }
 }
